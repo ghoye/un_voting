@@ -210,10 +210,10 @@ filtered_countries2 <- country_coefficients2 %>%
   filter(p.adjusted < 0.05)
 filtered_countries2
 
-# Sort for the countries increasing most quickly
+# Sort for the countries increasing most sharply
 filtered_countries2 %>% arrange(estimate)
 
-# Sort for the countries decreasing most quickly
+# Sort for the countries decreasing most sharply
 filtered_countries2 %>% arrange(desc(estimate))
 
 # Peek at the issues each vote related to
@@ -245,7 +245,7 @@ US_nu_by_year2 <- clean_votes %>%
   summarize(percent_yes = mean(vote == 1))
 US_nu_by_year2
 
-# Graph the percent of US 'yes' votes over time
+# Graph the percent of US 'yes' votes over time on nuclear weapons/material
 ggplot(US_nu_by_year2, aes(year, percent_yes)) +
   geom_line(aes(group=1), color = "dodgerblue4") + 
   labs(x="Year", y="Percentage of Yes Votes",
@@ -254,18 +254,19 @@ ggplot(US_nu_by_year2, aes(year, percent_yes)) +
   scale_y_continuous(breaks = seq(0, 1, by = 0.05)) +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
+# Group each country's votes by year, issue
 by_country_year_issue <- clean_votes %>%
   group_by(country, year, issue) %>%
   summarize(total = n(), percent_yes = mean(vote == 1)) %>%
   ungroup()
 by_country_year_issue
 
-# Filter by_country_year_topic for just the US
+# Filter by_country_year_issue for just the US
 US_by_country_year_issue <- by_country_year_issue %>%
   filter(country == "United States")
 US_by_country_year_issue
 
-# Plot % yes over time for the US, faceting by topic
+# Plot % yes over time for the US, faceting by issue
 ggplot(US_by_country_year_issue, aes(year, percent_yes)) + 
   geom_line(aes(group=1), color = "dodgerblue4") + 
   labs(x="Year", y="Percentage of Yes Votes",
@@ -275,12 +276,12 @@ ggplot(US_by_country_year_issue, aes(year, percent_yes)) +
   theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
   facet_wrap(~ issue)
 
-# Filter by_country_year_topic for just the US and the UK
+# Filter by_country_year_issue for just the US and the UK
 US_UK_by_country_year_issue <- by_country_year_issue %>%
   filter(country %in% c("United Kingdom", "United States"))
 US_UK_by_country_year_issue2
 
-# Plot % yes over time for the US and UK, faceting by topic
+# Plot % yes over time for the US and UK, faceting by issue
 ggplot(US_UK_by_country_year_issue, aes(year, percent_yes, color=country)) + 
   geom_line() + 
   labs(x="Year", y="Percentage of Yes Votes", color="Country",
@@ -313,7 +314,7 @@ country_issue_filtered %>% arrange(estimate) # Vanuatu, re: Isr-Pal conflict
 vanuatu_by_country_year_issue <- by_country_year_issue %>% filter(country == "Vanuatu")
 vanuatu_by_country_year_issue
 
-# Plot of percentage 'yes' over time, faceted by topic
+# Plot of percentage 'yes' over time, faceted by issue
 ggplot(vanuatu_by_country_year_issue, aes(year, percent_yes)) + 
   geom_line(aes(group=1), color = "seagreen4") + 
   labs(x="Year", y="Percentage of Yes Votes",
